@@ -90,7 +90,7 @@ parseTCS <- function(filename)
   staircase_1 <-
     parse_response_line(tcs_data[grepl("^Down:;", tcs_data)])
   staircase_2 <-
-    parse_response_line(tcs_data[grepl("^Down:;", tcs_data)])
+    parse_response_line(tcs_data[grepl("^Up:;", tcs_data)])
 
   responses_1 <-
     data.frame(staircase_1[, 1] == "gesehen",
