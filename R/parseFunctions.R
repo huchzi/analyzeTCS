@@ -126,6 +126,11 @@ parseTCS <- function(filename)
                                          double(0))
     )
     sapply(element_list[3:6], c)
+    
+    if (nrow(element_list) > 0)
+      return(sapply(element_list[3:6], c))
+    else
+      return(as.double(c(NA, NA, NA, NA)))
   }
 
   threshold_1 <-
