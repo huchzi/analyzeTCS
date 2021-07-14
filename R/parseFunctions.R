@@ -170,6 +170,7 @@ parseTCS <- function(filename)
     )
 
     contrasts <- sapply(staircase_line[c(3:6, 8:11)], cbind)
+    dim(contrasts) <- c(length(contrasts) / 8, 8)
 
     data.frame(n = as.integer(gamut_line[[2]]),
                staircase = factor(staircase_line[[1]],
