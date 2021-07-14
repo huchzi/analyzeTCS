@@ -190,6 +190,7 @@ parseTCS <- function(filename)
                            gamut[gamut$contrast == 0, ])
 
   gamut <- gamut[gamut$contrast != 0, ]
+  if (nrow(gamut) == 0) gamut <- NULL
 
   # return result
 
