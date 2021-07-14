@@ -186,6 +186,11 @@ parseTCS <- function(filename)
   false_positives <-
     parse_gamut_lines(grep("^Versuch Unterschreitung", tcs_data))
 
+  false_positives <- rbind(false_positives,
+                           gamut[gamut$contrast == 0, ])
+
+  gamut <- gamut[gamut$contrast != 0, ]
+
   # return result
 
   list(header = header,
