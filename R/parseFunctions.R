@@ -170,7 +170,7 @@ parseTCS <- function(filename)
     )
 
     contrasts <- sapply(staircase_line[c(3:6, 8:11)], cbind)
-    dim(contrasts) <- c(length(contrasts) / 8, 8)
+    if (length(contrasts > 0)) dim(contrasts) <- c(length(contrasts) / 8, 8)
 
     data.frame(n = as.integer(gamut_line[[2]]),
                staircase = factor(staircase_line[[1]],
@@ -186,11 +186,14 @@ parseTCS <- function(filename)
   false_positives <-
     parse_gamut_lines(grep("^Versuch Unterschreitung", tcs_data))
 
-  false_positives <- rbind(false_positives,
-                           gamut[gamut$contrast == 0, ])
+  if (length(gamut) > 0)
+  {
+    false_positives <- rbind(false_positives,
+                             gamut[gamut$contrast == 0, ])
 
-  gamut <- gamut[gamut$contrast != 0, ]
-  if (nrow(gamut) == 0) gamut <- NULL
+    gamut <- gamut[gamut$contrast != 0, ]
+    if (nrow(gamut) == 0) gamut <- NULL
+  }
 
   # return result
 
