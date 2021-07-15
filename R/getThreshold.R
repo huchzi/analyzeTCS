@@ -7,8 +7,8 @@ getThreshold <- function(which_staircases, test_field, parsedTCS)
   if(which_staircases %in% c("first", "second") & nrow(parsedTCS$thresholds) < 1) stop ("No staircase available.")
 
   if (which_staircases == "both") return(apply(parsedTCS$thresholds, 2, mean))
-  if (which_staircases == "first") return(parsedTCS$thresholds[1, ])
-  if (which_staircases == "second") return(parsedTCS$thresholds[2, ])
+  if (which_staircases == "first") return(unlist(parsedTCS$thresholds[1, ]))
+  if (which_staircases == "second") return(unlist(parsedTCS$thresholds[2, ]))
 
   if (which_staircases == "gamut")
   {
