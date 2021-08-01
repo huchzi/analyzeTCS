@@ -1,3 +1,4 @@
+#' @export
 show_plot <- function (t) {
   ggplot(t, aes(x = frequency, y = sensitivity, color = stimulus_type,
                 group = date_of_exam)) +
