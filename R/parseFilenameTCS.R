@@ -1,3 +1,4 @@
+#' @export
 parseFilenameTCS <- function(filename)
 {
   filename <- normalizePath(filename, winslash = "/", mustWork = FALSE)

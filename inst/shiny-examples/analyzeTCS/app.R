@@ -1,3 +1,4 @@
+library(analyzeTCS)
 source("server.R")
 source("ui.R")
 

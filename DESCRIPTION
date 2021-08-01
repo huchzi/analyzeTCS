@@ -9,7 +9,6 @@ Imports:
     shiny,
     shinydashboard,
     data.table,
-    flickerbox,
     ggplot2,
     testthat
 License: What license is it under?
