@@ -1,6 +1,3 @@
-library(ggplot2)
-library(flickerbox)
-
 server <- function(input, output) {
 
   values <- reactiveValues(sensitivity_table = NULL,

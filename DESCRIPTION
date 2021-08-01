@@ -10,7 +10,8 @@ Imports:
     shinydashboard,
     data.table,
     flickerbox,
-    ggplot2
+    ggplot2,
+    testthat
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

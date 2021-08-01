@@ -1,8 +1,3 @@
-library(shiny)
-library(shinydashboard)
-library(flickerbox)
-library(ggplot2)
-
 source("server.R")
 source("ui.R")
 
