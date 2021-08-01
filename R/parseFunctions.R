@@ -2,6 +2,7 @@
 #'
 #' @param filename name of the tcs file
 #' @return list of properties
+#' @export
 #'
 parseTCS <- function(filename)
 {

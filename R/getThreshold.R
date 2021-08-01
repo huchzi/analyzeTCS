@@ -1,3 +1,4 @@
+#' @export
 getThreshold <- function(which_staircases, test_field, parsedTCS)
 {
   stopifnot(which_staircases %in% c("both", "first", "second", "gamut"))
