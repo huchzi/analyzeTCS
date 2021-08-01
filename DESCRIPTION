@@ -4,8 +4,13 @@ Title: Functions for analyzing temporal contrast sensitivity data from the LED s
 Version: 0.1.0
 Author: Cord Huchzermeyer
 Maintainer: Cord Huchzermeyer <huchzi@email.de>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: This package contains functions for analyzeing temporal contrast sensitivity measurements.
+Imports:
+    shiny,
+    shinydashboard,
+    data.table,
+    flickerbox,
+    ggplot2
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
