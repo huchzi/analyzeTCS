@@ -1,3 +1,4 @@
+#' @export
 read_redcap <- function(filename) {
   
   #Read Data
