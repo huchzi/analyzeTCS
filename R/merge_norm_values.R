@@ -15,7 +15,7 @@ merge_norm_values <- function(dataTab,
                   norm_median, 
                   by = c("stimulus_type", "frequency"))
   result[, log_norm45 := log10(norm45)]
-  result[, log_norm := log_norm45 - .01 * (dataTab[, age_field] - 45)]
+  result[, log_norm := log_norm45 - .01 * (dataTab[, ..age_field] - 45)]
   result[, defect := log_sensitivity - log_norm]
   
   result
