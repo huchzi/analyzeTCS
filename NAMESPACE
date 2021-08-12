@@ -6,3 +6,6 @@ export(parseFilenameTCS)
 export(parseTCS)
 export(runAnalysis)
 export(show_plot)
+export(read_redcap)
+export(merge_redcap)
+export(merge_norm_values
