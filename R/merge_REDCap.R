@@ -1,4 +1,4 @@
-mergeREDCap <- function(tCSF, redcap) {
+merge_redcap <- function(tCSF, redcap) {
   
   stopifnot(is.data.table(tCSF))
   stopifnot(nrow(tCSF) > 0)
