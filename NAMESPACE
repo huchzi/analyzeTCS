@@ -8,4 +8,4 @@ export(runAnalysis)
 export(show_plot)
 export(read_redcap)
 export(merge_redcap)
-export(merge_norm_values
+export(merge_norm_values)
