@@ -145,7 +145,7 @@ server <- function(input, output) {
       geom_bar(stat="identity") +
       scale_y_continuous("Retinal illuminance [phot Td]", limits = c(0, 700)) +
       scale_fill_manual(values = c("red" = "red", "green" = "green", "blue" = "blue", "cyan" = "cyan")) +
-      guides(fill = FALSE) +
+      guides(fill = "none") +
       ggtitle("Retinal illuminances")
   })
 
@@ -204,7 +204,7 @@ server <- function(input, output) {
       scale_y_continuous("Contrast [%]", limits = c(0, 100), breaks = seq(0, 100, 10)) +
       scale_fill_manual(values = c("red","green", "blue", "black"),
                         breaks = c("lcone", "mcone", "scone", "rod")) +
-      guides(fill = FALSE) +
+      guides(fill = "none") +
       ggtitle("Photoreceptor contrasts")
   })
 

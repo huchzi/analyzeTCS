@@ -1,15 +1,9 @@
-.libPaths("C:/Users/huchzecd/R libraries")
-
-library(here)
-i_am("R/vingrys.R")
-
-load(here("Data", "vingrys.Rda"))
-
-# examples from the publication
-# n <- c(0, 15, 1, 14, 2, 13, 12, 3, 4, 11, 10, 5, 9, 6, 8, 7) + 1 # protanope
-# n <- c(0, 1, 2, 3, 4, 5, 6, 7, 15, 14, 13, 12, 11, 10, 9, 8) + 1
-# n <- c(0, 1, 2, 3, 4, 5, 6, 7, 9, 8, 10, 11, 12, 13, 14, 15) + 1
-
+#' Calculates scores for the Panel D15 according to Vingrys et al.
+#'
+#' Calculates scores for the Panel D15 according to Vingrys et al.
+#' @param caps a vector of cap numbers
+#' @return a list with parameters
+#' @export
 vingrys <- function(caps)
 {
   if (is.na(min(caps))) return(data.frame(    angle = NA,
@@ -18,8 +12,8 @@ vingrys <- function(caps)
                                         TES = NA,
                                         sIndex = NA,
                                         cIndex = NA))
-  u <- D15_vectors$u
-  v <- D15_vectors$v
+  u <- analyzeTCS::D15_vectors$u
+  v <- analyzeTCS::D15_vectors$v
   
   caps <- c(0, caps) + 1
   du <- sapply(2:16, function (x) return(u[caps][x] - u[caps][x - 1]))
@@ -58,3 +52,8 @@ vingrys <- function(caps)
   
   return(result)
 }
+
+# examples from the publication
+# n <- c(0, 15, 1, 14, 2, 13, 12, 3, 4, 11, 10, 5, 9, 6, 8, 7) + 1 # protanope
+# n <- c(0, 1, 2, 3, 4, 5, 6, 7, 15, 14, 13, 12, 11, 10, 9, 8) + 1
+# n <- c(0, 1, 2, 3, 4, 5, 6, 7, 9, 8, 10, 11, 12, 13, 14, 15) + 1
