@@ -1,4 +1,5 @@
 library(analyzeTCS)
+library(ggplot2)
 
 server <- function(input, output) {
 
@@ -168,7 +169,7 @@ server <- function(input, output) {
       y = sinpi(x * max(frequencies)) * envelope
     )
 
-    ggplot(table_for_plot, aes(x = x, y = y)) +
+    ggplot2::ggplot(table_for_plot, aes(x = x, y = y)) +
       geom_line() +
       scale_x_continuous("Time [sec]", breaks = 0:8, labels = seq(0, 4, .5), limits = c(0, 8)) +
       scale_y_continuous("", breaks = NULL) +
@@ -198,7 +199,7 @@ server <- function(input, output) {
       contrast = round(pcs * 100,3)
     )
 
-    ggplot(photoreceptorContrasts, aes(x = led, y = contrast, fill = led)) +
+    ggplot2::ggplot(photoreceptorContrasts, aes(x = led, y = contrast, fill = led)) +
       geom_bar(stat = "identity") +
       geom_text(aes(label=contrast), vjust=1.6, color="white")+
       scale_y_continuous("Contrast [%]", limits = c(0, 100), breaks = seq(0, 100, 10)) +
