@@ -11,3 +11,4 @@ show_plot <- function (t) {
                                   "S-cone" = "blue",
                                   "Rod" = "orange"))
 }
+
