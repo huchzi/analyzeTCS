@@ -1,5 +1,6 @@
 library(analyzeTCS)
 library(ggplot2)
+library(mongolite)
 
 server <- function(input, output) {
 
@@ -9,8 +10,65 @@ server <- function(input, output) {
                            eye = NULL,
                            date_of_exam = NULL,
                            time_of_exam = NULL,
-                           frequency = NULL
+                           frequency = NULL,
+                           database_attached = FALSE,
+                           db = NULL,
+                           sidebar_background = "lightgrey"
   )
+
+  # output$css <- renderUI({
+  #   tags$style(HTML(paste0('#sidebar {
+  #           background-color: ', values$sidebar_background, ';
+  #       }
+  #
+  #       body, label, input, button, select {
+  #         font-family: "Arial";
+  #       }')))
+  # })
+
+  output$css <- renderUI({
+    tags$style(HTML(paste0('.well {
+            background-color: ', values$sidebar_background,';
+        }
+
+        body, label, input, button, select {
+          font-family: "Arial";
+        }')))
+  })
+
+  observeEvent(input$attach_database,
+               {
+                 if (!values$database_attached)
+                 {
+
+                   values$db <- try(mongo(collection = "RawData",
+                                          db = "tCSF",
+                                          url = paste0("mongodb+srv://huchzi2:", input$password, "@cluster0.swgwmmk.mongodb.net/?retryWrites=true&w=majority"),
+                                          verbose = TRUE), silent = TRUE
+                   )
+                   if("try-error" %in% class(values$db))
+                   {
+                     values$database_attached <- FALSE
+                     output$message <- renderText({"Database was not successfully attached."})
+                   }
+                   else
+                   {
+                     values$database_attached <- TRUE
+                     output$message <- renderText({"Database attached."})
+                     values$sidebar_background <- "darkgrey"
+                   }
+                 }
+               })
+
+  observeEvent(input$detach_database,
+               {
+                 if (values$database_attached) {
+                   values$database_attached <- FALSE
+                   values$sidebar_background <- "lightgrey"
+                   output$message <- renderText({"Database detached."})
+                   values$db$disconnect()
+                 }
+               })
 
   observeEvent(input$add_to_table,
                {
@@ -82,6 +140,10 @@ server <- function(input, output) {
                                           log_sensitivity = log10(100 / photoreceptor_contrast)
                  )
 
+                 if(values$database_attached) {
+                   values$db$insert(parameters)
+                 }
+
                  new_table <- rbind(values$sensitivity_table,
                                     parameters
                  )
@@ -126,7 +188,8 @@ server <- function(input, output) {
     pat_info <- paste0("<b>Patient ID:</b>  ", patient_info$patid,
                        "<br/><b>Eye:</b>  ", patient_info$eye,
                        "<br/><b>Date of exam:</b>  ", patient_info$date_of_exam,
-                       "<br/><b>Time of exam:</b>  ", patient_info$time_of_exam)
+                       "<br/><b>Time of exam:</b>  ", patient_info$time_of_exam,
+                       "<br/><b>Database: ", values$database_attached)
 
     HTML(pat_info)
   })

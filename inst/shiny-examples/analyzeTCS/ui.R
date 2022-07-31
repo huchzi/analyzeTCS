@@ -1,10 +1,12 @@
 ui <- fluidPage(
+  tags$head(),
 
   # Application title
   titlePanel("Analyze tCS output files"),
 
   sidebarLayout(
     sidebarPanel(
+      htmlOutput("css"),
       fileInput("raw_csv", "Load file", multiple = FALSE),
       wellPanel(
         htmlOutput("patid")
@@ -17,7 +19,7 @@ ui <- fluidPage(
                    choices = c("L-cone", "M-cone", "S-cone", "Rod", "Mixed"),
                    selected = "character(0)"),
       radioButtons("use_threshold", label = "Use as threshold...",
-                   choices = c("both", "first", "second", "gamut"),
+                   choices = c("both", "first", "second", "gamut", "none"),
                    selected = "both"),
       actionButton("add_to_table", "Add to table"),
       width = 3
@@ -49,7 +51,21 @@ ui <- fluidPage(
                  wellPanel(
                    dataTableOutput("sensitivity_table")),
                  br(),
-                 plotOutput("results"))
+                 plotOutput("results")),
+        tabPanel("Database",
+                 br(),
+                 br(),
+                 actionButton("attach_database", "Attach database"),
+                 br(),
+                 br(),
+                 actionButton("detach_database", "Detach database"),
+                 br(),
+                 br(),
+                 textInput("password", "Password"),
+                 br(),
+                 br(),
+                 textOutput("message")
+        )
       ),
       width = 9
     )
