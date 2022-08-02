@@ -1,13 +1,15 @@
-ui <- fluidPage(
-  tags$link(rel = "stylesheet", type = "text/css", href = "analyzeTCS.css"),
-  tags$head(),
+ui <- fixedPage(
+  #tags$head(tags$style("h2 { color: green; }")),
+  tags$head(  tags$link(rel = "stylesheet", type = "text/css", href = "theme3.css")),
 
   # Application title
   titlePanel("Analyze tCS output files"),
 
   sidebarLayout(
     sidebarPanel(
-      htmlOutput("css"),
+      id = "sidebar1",
+      tags$head(  tags$link(rel = "stylesheet", type = "text/css", href = "theme3.css")),
+      # htmlOutput("css"),
       fileInput("raw_csv", "Load file", multiple = FALSE),
       wellPanel(
         class = "pat-info",
