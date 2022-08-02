@@ -16,15 +16,7 @@ server <- function(input, output) {
                            sidebar_background = "lightgrey"
   )
 
-  # output$css <- renderUI({
-  #   tags$style(HTML(paste0('#sidebar {
-  #           background-color: ', values$sidebar_background, ';
-  #       }
-  #
-  #       body, label, input, button, select {
-  #         font-family: "Arial";
-  #       }')))
-  # })
+  # db$aggregate(sprintf('[{ "$match": { "patid": %d } }, { "$count": "patid" }]', 1))
 
   output$css <- renderUI({
     tags$style(HTML(paste0('.well {
@@ -35,6 +27,8 @@ server <- function(input, output) {
           font-family: "Arial";
         }')))
   })
+
+##### Buttons #####
 
   observeEvent(input$attach_database,
                {
@@ -55,7 +49,7 @@ server <- function(input, output) {
                    {
                      values$database_attached <- TRUE
                      output$message <- renderText({"Database attached."})
-                     values$sidebar_background <- "darkgrey"
+                     values$sidebar_background <- "cyan"
                    }
                  }
                })
@@ -152,12 +146,6 @@ server <- function(input, output) {
 
                })
 
-  output$sensitivity_table <- renderDataTable({
-    values$sensitivity_table
-  },
-  options = list(width = "80%",
-                 scrollX = TRUE))
-
   output$downloadData <- downloadHandler(
     filename = function() {
       paste("resultsTCSF", ".csv", sep = "")
@@ -168,13 +156,6 @@ server <- function(input, output) {
     }
   )
 
-  output$rawData <- renderPrint({
-    file <- input$raw_csv
-    req(file)
-    readLines(file$datapath)
-  },
-  width = 80)
-
   output$patid <- renderUI({
     file <- input$raw_csv
     req(file)
@@ -183,22 +164,66 @@ server <- function(input, output) {
     values$patid <- patient_info$patid
     values$eye <- patient_info$eye
     values$date_of_exam <- patient_info$date_of_exam
-    values$time_of_exam <- patient_info$date_of_exam
+    values$time_of_exam <- patient_info$time_of_exam
+
+    if (values$database_attached)
+    {
+      nr <- values$db$aggregate(sprintf('[{ "$match": { "patid": %d } },
+                                        { "$count": "patid" }]', values$patid))
+      inDB <- values$db$aggregate(sprintf('[{ "$match": { "patid" : %d, "date_of_exam" : "%s" , "time_of_exam" : "%s" } },
+                                        { "$count": "patid" }]',
+                                          values$patid,
+                                          values$date_of_exam,
+                                          values$time_of_exam
+      )) >= 1
+      print(inDB)
+    }
+    else
+    {
+      nr <- NA
+      inDB <- NA
+    }
 
     pat_info <- paste0("<b>Patient ID:</b>  ", patient_info$patid,
                        "<br/><b>Eye:</b>  ", patient_info$eye,
                        "<br/><b>Date of exam:</b>  ", patient_info$date_of_exam,
                        "<br/><b>Time of exam:</b>  ", patient_info$time_of_exam,
-                       "<br/><b>Database: ", values$database_attached)
+                       "<br/><br/><b>Number of records:</b>  ", nr,
+                       "<br/><b>Record exists:</b>  ", inDB)
 
     HTML(pat_info)
   })
+
+##### Print #####
+
+  output$rawData <- renderPrint({
+    file <- input$raw_csv
+    req(file)
+    readLines(file$datapath)
+  },
+  width = 80)
+
+  output$parsedData2 <- renderPrint({
+    file <- input$raw_csv
+    req(file)
+    parseTCS(file$datapath)[-1]
+  })
+
+##### DataTables #####
 
   output$parsedData <- renderDataTable({
     file <- input$raw_csv
     req(file)
     parseTCS(file$datapath)$header
   })
+
+  output$sensitivity_table <- renderDataTable({
+    values$sensitivity_table
+  },
+  options = list(width = "80%",
+                 scrollX = TRUE))
+
+##### Plots #####
 
   output$luminance <- renderPlot({
     file <- input$raw_csv
@@ -323,27 +348,6 @@ server <- function(input, output) {
       scale_x_discrete("Trial", limits = factor(1:3))
   })
 
-  output$false_positives <- renderPlot({
-    file <- input$raw_csv
-    req(file)
-    results <- parseTCS(file$datapath)$false_positives
-
-    if (is.null(results)) results <- data.frame(n = 1, staircase = c("staircase_1", "staircase_2"), contrast = -5)
-
-    # plot table
-    ggplot(results, aes(x = n, y = contrast)) +
-      geom_point(color = "black") +
-      facet_wrap(~ staircase) +
-      scale_y_continuous("Threshold [%]", limits = c(-1, 100), breaks = seq(0, 100, 20)) +
-      scale_x_discrete("Trial", limits = factor(1:3))
-  })
-
-  output$parsedData2 <- renderPrint({
-    file <- input$raw_csv
-    req(file)
-    parseTCS(file$datapath)[-1]
-  })
-
   output$results <- renderPlot({
     req(input$raw_csv)
 
@@ -361,5 +365,21 @@ server <- function(input, output) {
       scale_x_log10("Frequency") +
       scale_y_log10("Sensitivity")
   })
+
+  output$false_positives <- renderPlot({
+    file <- input$raw_csv
+    req(file)
+    results <- parseTCS(file$datapath)$false_positives
+
+    if (is.null(results)) results <- data.frame(n = 1, staircase = c("staircase_1", "staircase_2"), contrast = -5)
+
+    # plot table
+    ggplot(results, aes(x = n, y = contrast)) +
+      geom_point(color = "black") +
+      facet_wrap(~ staircase) +
+      scale_y_continuous("Threshold [%]", limits = c(-1, 100), breaks = seq(0, 100, 20)) +
+      scale_x_discrete("Trial", limits = factor(1:3))
+  })
+
 
 }

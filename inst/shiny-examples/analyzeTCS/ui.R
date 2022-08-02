@@ -1,4 +1,5 @@
 ui <- fluidPage(
+  tags$link(rel = "stylesheet", type = "text/css", href = "analyzeTCS.css"),
   tags$head(),
 
   # Application title
@@ -9,6 +10,7 @@ ui <- fluidPage(
       htmlOutput("css"),
       fileInput("raw_csv", "Load file", multiple = FALSE),
       wellPanel(
+        class = "pat-info",
         htmlOutput("patid")
       ),
       numericInput("filter", label = "Neutral Density Filter", value = .3, min = 0, max = 5, step = .1),
